@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chola Two Wheeler Delivery System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:20px;
+            background:#f2f4f8;
+        }
+
+        h2{
+            text-align:center;
+            color:#0033a0;
+        }
+
+        .form-box{
+            background:white;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom:30px;
+        }
+
+        input{
+            width:100%;
+            padding:8px;
+            margin-bottom:12px;
+        }
+
+        button{
+            padding:10px 18px;
+            background:#0033a0;
+            color:white;
+            border:none;
+            border-radius:5px;
+            margin-right:10px;
+        }
+
+        .letter{
+            background:white;
+            padding:50px;
+            position:relative;
+        }
+
+        .seal{
+            position:absolute;
+            right:60px;
+            bottom:80px;
+            height:120px;
+        }
+
+        .signature{
+            height:80px;
+            margin-top:10px;
+        }
+
+        @media print{
+            button{display:none;}
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>CHOLA TWO WHEELER DELIVERY LETTER</h2>
+
+<div class="form-box">
+
+<input type="text" id="cname" placeholder="Customer Name">
+<input type="text" id="address" placeholder="Customer Address">
+<input type="text" id="product" placeholder="Product Name">
+<input type="text" id="cost" placeholder="Vehicle Cost">
+<input type="text" id="initial" placeholder="Initial Amount">
+<input type="text" id="loan" placeholder="Loan Amount">
+<input type="text" id="empname" placeholder="Employee Name">
+<input type="text" id="empcode" placeholder="Employee Code">
+
+<label>Upload Signature</label>
+<input type="file" id="signUpload">
+
+<label>Upload Seal</label>
+<input type="file" id="sealUpload">
+
+<button onclick="generateLetter()">Generate Letter</button>
+<button onclick="downloadPDF()">Download PDF</button>
+
+</div>
+
+<div id="output"></div>
+
+<script>
+
+let signData="";
+let sealData="";
+
+document.getElementById("signUpload").onchange=function(e){
+let reader=new FileReader();
+reader.onload=function(){ signData=reader.result; }
+reader.readAsDataURL(e.target.files[0]);
+};
+
+document.getElementById("sealUpload").onchange=function(e){
+let reader=new FileReader();
+reader.onload=function(){ sealData=reader.result; }
+reader.readAsDataURL(e.target.files[0]);
+};
+
+function generateLetter(){
+
+let cname=document.getElementById("cname").value;
+let address=document.getElementById("address").value;
+let product=document.getElementById("product").value;
+let cost=document.getElementById("cost").value;
+let initial=document.getElementById("initial").value;
+let loan=document.getElementById("loan").value;
+let empname=document.getElementById("empname").value;
+let empcode=document.getElementById("empcode").value;
+
+document.getElementById("output").innerHTML=`
+
+<div class="letter" id="letterContent">
+
+<h3 style="text-align:center;">TWO WHEELER DELIVERY LETTER</h3>
+
+<p>Date: ${new Date().toLocaleDateString()}</p>
+
+<p>
+<b>To,</b><br>
+Babu Motors<br>
+Veppur
+</p>
+
+<p><b>Subject:</b> Loan Approval / Sanctioned Letter for Cholamandalam Finance</p>
+
+<p>
+1) Customer Name : ${cname}<br>
+2) Customer Address : ${address}<br>
+3) Product Name : ${product}<br>
+4) Vehicle Cost : ₹ ${cost}<br>
+5) Initial Amount : ₹ ${initial}<br>
+6) Loan Amount : ₹ ${loan}
+</p>
+
+<p>
+Kindly ensure that all required documents are duly signed by the customer before delivery and provide us with the delivery acknowledgement copy along with invoice and necessary RTO documents at the earliest.
+</p>
+
+<p>
+This letter is issued upon successful completion of loan formalities.
+</p>
+
+<p>Thanking You</p>
+
+<p>
+Emp Name : ${empname}<br>
+Emp Code : ${empcode}
+</p>
+
+${signData ? `<img src="${signData}" class="signature">` : ""}
+${sealData ? `<img src="${sealData}" class="seal">` : ""}
+
+</div>
+`;
+}
+
+function downloadPDF(){
+let element=document.getElementById("letterContent");
+html2pdf().from(element).save("Two_Wheeler_Delivery_Letter.pdf");
+}
+
+</script>
+
+</body>
+</html>
