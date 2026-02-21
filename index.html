@@ -1,69 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chola Two Wheeler Delivery System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chola Two Wheeler Delivery System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- Signature Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            margin:0;
-            padding:20px;
-            background:#f2f4f8;
-        }
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:20px;
+    background:#f2f4f8;
+}
 
-        h2{
-            text-align:center;
-            color:#0033a0;
-        }
+h2{
+    text-align:center;
+    color:#0033a0;
+}
 
-        .form-box{
-            background:white;
-            padding:20px;
-            border-radius:8px;
-            box-shadow:0 3px 10px rgba(0,0,0,0.1);
-            margin-bottom:30px;
-        }
+.form-box{
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    margin-bottom:30px;
+}
 
-        input{
-            width:100%;
-            padding:8px;
-            margin-bottom:12px;
-        }
+input{
+    width:100%;
+    padding:8px;
+    margin-bottom:12px;
+}
 
-        button{
-            padding:10px 18px;
-            background:#0033a0;
-            color:white;
-            border:none;
-            border-radius:5px;
-            margin-right:10px;
-        }
+button{
+    padding:10px 18px;
+    background:#0033a0;
+    color:white;
+    border:none;
+    border-radius:5px;
+    margin-right:10px;
+}
 
-        .letter{
-            background:white;
-            padding:50px;
-            position:relative;
-        }
+.letter{
+    background:white;
+    padding:60px;
+    position:relative;
+    min-height:800px;
+}
 
-        .seal{
-            position:absolute;
-            right:60px;
-            bottom:80px;
-            height:120px;
-        }
+/* Automatic Blue Seal */
+.seal{
+    position:fixed;
+    right:90px;
+    bottom:140px;
+    width:150px;
+    height:150px;
+    border:4px solid #0033cc;
+    border-radius:50%;
+    text-align:center;
+    color:#0033cc;
+    font-weight:bold;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-size:14px;
+    line-height:20px;
+}
 
-        .signature{
-            height:80px;
-            margin-top:10px;
-        }
+/* Automatic Signature */
+.auto-signature{
+    font-family: 'Great Vibes', cursive;
+    font-size:32px;
+    color:#000;
+    margin-top:25px;
+}
 
-        @media print{
-            button{display:none;}
-        }
-    </style>
+@media print{
+    body{
+        background:white;
+    }
+    .form-box{
+        display:none;
+    }
+    button{
+        display:none;
+    }
+    .letter{
+        box-shadow:none;
+        margin:0;
+    }
+}
+</style>
 </head>
 
 <body>
@@ -78,14 +108,8 @@
 <input type="text" id="cost" placeholder="Vehicle Cost">
 <input type="text" id="initial" placeholder="Initial Amount">
 <input type="text" id="loan" placeholder="Loan Amount">
-<input type="text" id="empname" placeholder="Employee Name">
+<input type="text" id="empname" placeholder="Employee Name (For Signature)">
 <input type="text" id="empcode" placeholder="Employee Code">
-
-<label>Upload Signature</label>
-<input type="file" id="signUpload">
-
-<label>Upload Seal</label>
-<input type="file" id="sealUpload">
 
 <button onclick="generateLetter()">Generate Letter</button>
 <button onclick="downloadPDF()">Download PDF</button>
@@ -95,21 +119,6 @@
 <div id="output"></div>
 
 <script>
-
-let signData="";
-let sealData="";
-
-document.getElementById("signUpload").onchange=function(e){
-let reader=new FileReader();
-reader.onload=function(){ signData=reader.result; }
-reader.readAsDataURL(e.target.files[0]);
-};
-
-document.getElementById("sealUpload").onchange=function(e){
-let reader=new FileReader();
-reader.onload=function(){ sealData=reader.result; }
-reader.readAsDataURL(e.target.files[0]);
-};
 
 function generateLetter(){
 
@@ -124,11 +133,13 @@ let empcode=document.getElementById("empcode").value;
 
 document.getElementById("output").innerHTML=`
 
-<div class="letter" id="letterContent">
+<div class="letter">
 
 <h3 style="text-align:center;">TWO WHEELER DELIVERY LETTER</h3>
 
 <p>Date: ${new Date().toLocaleDateString()}</p>
+
+<br>
 
 <p>
 <b>To,</b><br>
@@ -136,42 +147,57 @@ Babu Motors<br>
 Veppur
 </p>
 
+<br>
+
 <p><b>Subject:</b> Loan Approval / Sanctioned Letter for Cholamandalam Finance</p>
 
+<br>
+
 <p>
-1) Customer Name : ${cname}<br>
-2) Customer Address : ${address}<br>
-3) Product Name : ${product}<br>
-4) Vehicle Cost : ₹ ${cost}<br>
-5) Initial Amount : ₹ ${initial}<br>
+1) Customer Name : ${cname}<br><br>
+2) Customer Address : ${address}<br><br>
+3) Product Name : ${product}<br><br>
+4) Vehicle Cost : ₹ ${cost}<br><br>
+5) Initial Amount : ₹ ${initial}<br><br>
 6) Loan Amount : ₹ ${loan}
 </p>
+
+<br>
 
 <p>
 Kindly ensure that all required documents are duly signed by the customer before delivery and provide us with the delivery acknowledgement copy along with invoice and necessary RTO documents at the earliest.
 </p>
 
+<br>
+
 <p>
 This letter is issued upon successful completion of loan formalities.
 </p>
 
+<br><br>
+
 <p>Thanking You</p>
+
+<br>
+
+<div class="auto-signature">${empname}</div>
 
 <p>
 Emp Name : ${empname}<br>
 Emp Code : ${empcode}
 </p>
 
-${signData ? `<img src="${signData}" class="signature">` : ""}
-${sealData ? `<img src="${sealData}" class="seal">` : ""}
+<div class="seal">
+CHOLAMANDALAM FINANCE<br>
+VIRUDHACHALAM
+</div>
 
 </div>
 `;
 }
 
 function downloadPDF(){
-let element=document.getElementById("letterContent");
-html2pdf().from(element).save("Two_Wheeler_Delivery_Letter.pdf");
+    window.print();
 }
 
 </script>
