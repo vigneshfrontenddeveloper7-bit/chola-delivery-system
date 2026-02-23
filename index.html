@@ -1,203 +1,239 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Chola Two Wheeler Delivery System</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Signature Font -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Chola Delivery Letter</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    padding:20px;
-    background:#f2f4f8;
+font-family: "Times New Roman", serif;
+background:#f5f5f5;
+padding:20px;
 }
 
-h2{
-    text-align:center;
-    color:#0033a0;
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:30px;
 }
 
-.form-box{
-    background:white;
-    padding:20px;
-    border-radius:8px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-    margin-bottom:30px;
-}
-
-input{
-    width:100%;
-    padding:8px;
-    margin-bottom:12px;
+input, textarea{
+width:100%;
+padding:8px;
+margin-bottom:10px;
 }
 
 button{
-    padding:10px 18px;
-    background:#0033a0;
-    color:white;
-    border:none;
-    border-radius:5px;
-    margin-right:10px;
+padding:10px 20px;
+background:#002f6c;
+color:white;
+border:none;
+cursor:pointer;
+margin-right:10px;
 }
 
-.letter{
-    background:white;
-    padding:60px;
-    position:relative;
-    min-height:800px;
+#letter{
+display:none;
+margin-top:30px;
+padding:60px;
+position:relative;
 }
 
-/* Automatic Blue Seal */
+.logo{
+position:absolute;
+top:40px;
+left:60px;
+width:100px;
+}
+
+.company{
+text-align:center;
+font-weight:bold;
+font-size:18px;
+}
+
+.title{
+text-align:center;
+font-weight:bold;
+margin-top:5px;
+}
+
+.rightDate{
+position:absolute;
+top:120px;
+right:60px;
+}
+
+.field{
+margin-top:12px;
+}
+
+.signature{
+position:absolute;
+bottom:80px;
+right:120px;
+font-family:cursive;
+font-size:28px;
+color:blue;
+}
+
+.yours{
+position:absolute;
+bottom:120px;
+right:100px;
+}
+
 .seal{
-    position:fixed;
-    right:90px;
-    bottom:140px;
-    width:150px;
-    height:150px;
-    border:4px solid #0033cc;
-    border-radius:50%;
-    text-align:center;
-    color:#0033cc;
-    font-weight:bold;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    font-size:14px;
-    line-height:20px;
+position:absolute;
+bottom:60px;
+right:60px;
+width:160px;
+height:160px;
+border-radius:50%;
+border:4px solid blue;
+display:flex;
+align-items:center;
+justify-content:center;
+color:blue;
+font-weight:bold;
 }
 
-/* Automatic Signature */
-.auto-signature{
-    font-family: 'Great Vibes', cursive;
-    font-size:32px;
-    color:#000;
-    margin-top:25px;
+.seal-logo{
+width:60px;
 }
 
-@media print{
-    body{
-        background:white;
-    }
-    .form-box{
-        display:none;
-    }
-    button{
-        display:none;
-    }
-    .letter{
-        box-shadow:none;
-        margin:0;
-    }
+.circular-text{
+position:absolute;
+width:160px;
+height:160px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.circular-text span{
+position:absolute;
+left:50%;
+font-size:14px;
+transform-origin:0 80px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>CHOLA TWO WHEELER DELIVERY LETTER</h2>
+<div class="container">
 
-<div class="form-box">
+<h2>Chola Delivery Letter Generator</h2>
 
-<input type="text" id="cname" placeholder="Customer Name">
-<input type="text" id="address" placeholder="Customer Address">
-<input type="text" id="product" placeholder="Product Name">
-<input type="text" id="cost" placeholder="Vehicle Cost">
-<input type="text" id="initial" placeholder="Initial Amount">
-<input type="text" id="loan" placeholder="Loan Amount">
-<input type="text" id="empname" placeholder="Employee Name (For Signature)">
-<input type="text" id="empcode" placeholder="Employee Code">
+<input id="name" placeholder="Customer Name">
+<textarea id="address" placeholder="Address"></textarea>
+<input id="model" placeholder="Product / Vehicle Model">
+<input id="price" placeholder="Price">
+<input id="initial" placeholder="Initial Payment">
+<input id="disbursement" placeholder="Disbursement Amount">
 
-<button onclick="generateLetter()">Generate Letter</button>
+<button onclick="viewLetter()">View Letter</button>
 <button onclick="downloadPDF()">Download PDF</button>
 
+<div id="letter">
+
+<img src="logo.png" class="logo">
+
+<div class="company">
+CHOLAMANDALAM INVESTMENT & FINANCE COMPANY LTD
 </div>
 
-<div id="output"></div>
+<div class="title">
+DELIVERY LETTER ORDER
+</div>
 
-<script>
+<div class="rightDate">
+Date: <script>document.write(new Date().toLocaleDateString());</script>
+</div>
 
-function generateLetter(){
+<br><br><br>
 
-let cname=document.getElementById("cname").value;
-let address=document.getElementById("address").value;
-let product=document.getElementById("product").value;
-let cost=document.getElementById("cost").value;
-let initial=document.getElementById("initial").value;
-let loan=document.getElementById("loan").value;
-let empname=document.getElementById("empname").value;
-let empcode=document.getElementById("empcode").value;
-
-document.getElementById("output").innerHTML=`
-
-<div class="letter">
-
-<h3 style="text-align:center;">TWO WHEELER DELIVERY LETTER</h3>
-
-<p>Date: ${new Date().toLocaleDateString()}</p>
+<p><b>To</b></p>
+<p id="vName"></p>
+<p id="vAddress"></p>
 
 <br>
+
+<p><b>Sub:</b> Vehicle / Product releasing order</p>
+
+<p>Dear Sir / Madam,</p>
 
 <p>
-<b>To,</b><br>
-Babu Motors<br>
-Veppur
+We Have Approved a Two-Wheeler Loan / Consumer Durable Loan for the Captioned Customer and Details are as below.
 </p>
 
-<br>
-
-<p><b>Subject:</b> Loan Approval / Sanctioned Letter for Cholamandalam Finance</p>
-
-<br>
-
-<p>
-1) Customer Name : ${cname}<br><br>
-2) Customer Address : ${address}<br><br>
-3) Product Name : ${product}<br><br>
-4) Vehicle Cost : ₹ ${cost}<br><br>
-5) Initial Amount : ₹ ${initial}<br><br>
-6) Loan Amount : ₹ ${loan}
-</p>
-
-<br>
-
-<p>
-Kindly ensure that all required documents are duly signed by the customer before delivery and provide us with the delivery acknowledgement copy along with invoice and necessary RTO documents at the earliest.
-</p>
-
-<br>
-
-<p>
-This letter is issued upon successful completion of loan formalities.
-</p>
+<div class="field">Product / Vehicle Model : <span id="vModel"></span></div>
+<div class="field">Price : <span id="vPrice"></span></div>
+<div class="field">Initial Payment : <span id="vInitial"></span></div>
+<div class="field">Disbursement Amount : <span id="vDisbursement"></span></div>
 
 <br><br>
 
-<p>Thanking You</p>
-
-<br>
-
-<div class="auto-signature">${empname}</div>
-
 <p>
-Emp Name : ${empname}<br>
-Emp Code : ${empcode}
+We request you to deliver the vehicle to the customer at the earliest.
 </p>
 
+<div class="yours">
+Yours Faithfully
+</div>
+
+<div class="signature">
+Branch Manager
+</div>
+
 <div class="seal">
-CHOLAMANDALAM FINANCE<br>
-VIRUDHACHALAM
+<div class="circular-text" id="circleText"></div>
+<img src="logo.png" class="seal-logo">
 </div>
 
 </div>
-`;
+</div>
+
+<script>
+
+function viewLetter(){
+document.getElementById("letter").style.display="block";
+
+vName.innerText = name.value;
+vAddress.innerText = address.value;
+vModel.innerText = model.value;
+vPrice.innerText = price.value;
+vInitial.innerText = initial.value;
+vDisbursement.innerText = disbursement.value;
+
+createCircularText("CHOLAMANDALAM FINANCE");
+}
+
+function createCircularText(text){
+const container = document.getElementById("circleText");
+container.innerHTML="";
+const radius = 80;
+for(let i=0;i<text.length;i++){
+const span = document.createElement("span");
+span.innerText = text[i];
+const angle = i * (360/text.length);
+span.style.transform = `rotate(${angle}deg) translate(0, -70px)`;
+container.appendChild(span);
+}
 }
 
 function downloadPDF(){
-    window.print();
+const element = document.getElementById("letter");
+html2pdf().from(element).set({
+margin:10,
+filename:'Chola_Delivery_Letter.pdf',
+html2canvas:{scale:2},
+jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+}).save();
 }
 
 </script>
