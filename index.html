@@ -7,16 +7,9 @@
 
 <style>
 body{
-font-family: "Times New Roman", serif;
-background:#f5f5f5;
+font-family:"Times New Roman", serif;
+background:#f4f4f4;
 padding:20px;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-background:white;
-padding:30px;
 }
 
 input, textarea{
@@ -27,7 +20,7 @@ margin-bottom:10px;
 
 button{
 padding:10px 20px;
-background:#002f6c;
+background:#0033cc;
 color:white;
 border:none;
 cursor:pointer;
@@ -36,22 +29,28 @@ margin-right:10px;
 
 #letter{
 display:none;
-margin-top:30px;
-padding:60px;
+width:794px;      /* A4 width */
+min-height:1123px; /* A4 height */
+margin:auto;
+background:white;
+padding:70px;
 position:relative;
+box-sizing:border-box;
 }
 
+/* Logo */
 .logo{
 position:absolute;
-top:40px;
-left:60px;
-width:100px;
+top:50px;
+left:70px;
+width:90px;
 }
 
+/* Company */
 .company{
 text-align:center;
-font-weight:bold;
 font-size:18px;
+font-weight:bold;
 }
 
 .title{
@@ -60,72 +59,73 @@ font-weight:bold;
 margin-top:5px;
 }
 
-.rightDate{
+/* Date */
+.date{
 position:absolute;
 top:120px;
-right:60px;
+right:70px;
+font-size:14px;
 }
 
-.field{
-margin-top:12px;
-}
-
-.signature{
-position:absolute;
-bottom:80px;
-right:120px;
-font-family:cursive;
-font-size:28px;
-color:blue;
-}
-
-.yours{
-position:absolute;
-bottom:120px;
-right:100px;
-}
-
+/* Seal */
 .seal{
 position:absolute;
-bottom:60px;
-right:60px;
-width:160px;
-height:160px;
+bottom:240px;
+right:90px;
+width:130px;
+height:130px;
 border-radius:50%;
-border:4px solid blue;
+border:4px solid #0033cc;
 display:flex;
 align-items:center;
 justify-content:center;
-color:blue;
-font-weight:bold;
+}
+
+.inner-circle{
+position:absolute;
+width:95px;
+height:95px;
+border-radius:50%;
+border:3px solid #0033cc;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .seal-logo{
-width:60px;
-}
-
-.circular-text{
-position:absolute;
-width:160px;
-height:160px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
+width:45px;
 }
 
 .circular-text span{
 position:absolute;
 left:50%;
+font-size:11px;
+font-weight:bold;
+color:#0033cc;
+transform-origin:0 65px;
+}
+
+/* Yours Faithfully */
+.yours{
+position:absolute;
+bottom:290px;
+right:90px;
+}
+
+/* Employee Box */
+.employee-box{
+position:absolute;
+bottom:100px;
+left:70px;
+border:1px solid black;
+padding:15px;
+width:280px;
 font-size:14px;
-transform-origin:0 80px;
 }
 </style>
 </head>
 
 <body>
-
-<div class="container">
 
 <h2>Chola Delivery Letter Generator</h2>
 
@@ -139,6 +139,8 @@ transform-origin:0 80px;
 <button onclick="viewLetter()">View Letter</button>
 <button onclick="downloadPDF()">Download PDF</button>
 
+<br><br>
+
 <div id="letter">
 
 <img src="logo.png" class="logo">
@@ -151,9 +153,7 @@ CHOLAMANDALAM INVESTMENT & FINANCE COMPANY LTD
 DELIVERY LETTER ORDER
 </div>
 
-<div class="rightDate">
-Date: <script>document.write(new Date().toLocaleDateString());</script>
-</div>
+<div class="date" id="autoDate"></div>
 
 <br><br><br>
 
@@ -171,35 +171,39 @@ Date: <script>document.write(new Date().toLocaleDateString());</script>
 We Have Approved a Two-Wheeler Loan / Consumer Durable Loan for the Captioned Customer and Details are as below.
 </p>
 
-<div class="field">Product / Vehicle Model : <span id="vModel"></span></div>
-<div class="field">Price : <span id="vPrice"></span></div>
-<div class="field">Initial Payment : <span id="vInitial"></span></div>
-<div class="field">Disbursement Amount : <span id="vDisbursement"></span></div>
+<p>Product / Vehicle Model : <span id="vModel"></span></p>
+<p>Price : <span id="vPrice"></span></p>
+<p>Initial Payment : <span id="vInitial"></span></p>
+<p>Disbursement Amount : <span id="vDisbursement"></span></p>
 
 <br><br>
 
-<p>
-We request you to deliver the vehicle to the customer at the earliest.
-</p>
+<p>Thanking You</p>
 
 <div class="yours">
 Yours Faithfully
 </div>
 
-<div class="signature">
-Branch Manager
-</div>
-
+<!-- Seal -->
 <div class="seal">
-<div class="circular-text" id="circleText"></div>
+<div class="inner-circle">
 <img src="logo.png" class="seal-logo">
 </div>
-
+<div id="circleText"></div>
 </div>
+
+<!-- Employee Box -->
+<div class="employee-box">
+<b>EMP NAME:</b> J.VIGNESH<br>
+<b>EMP CODE:</b> CB100012<br>
+<b>BRANCH:</b> VIRUDHACHALAM
+</div>
+
 </div>
 
 <script>
 
+/* View Letter */
 function viewLetter(){
 document.getElementById("letter").style.display="block";
 
@@ -209,23 +213,9 @@ vModel.innerText = model.value;
 vPrice.innerText = price.value;
 vInitial.innerText = initial.value;
 vDisbursement.innerText = disbursement.value;
-
-createCircularText("CHOLAMANDALAM FINANCE");
 }
 
-function createCircularText(text){
-const container = document.getElementById("circleText");
-container.innerHTML="";
-const radius = 80;
-for(let i=0;i<text.length;i++){
-const span = document.createElement("span");
-span.innerText = text[i];
-const angle = i * (360/text.length);
-span.style.transform = `rotate(${angle}deg) translate(0, -70px)`;
-container.appendChild(span);
-}
-}
-
+/* Download PDF */
 function downloadPDF(){
 const element = document.getElementById("letter");
 html2pdf().from(element).set({
@@ -235,6 +225,31 @@ html2canvas:{scale:2},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 }).save();
 }
+
+/* Auto Date */
+function formatDate(){
+const today = new Date();
+const day = String(today.getDate()).padStart(2,'0');
+const month = String(today.getMonth()+1).padStart(2,'0');
+const year = today.getFullYear();
+return day + "/" + month + "/" + year;
+}
+document.getElementById("autoDate").innerText = "Date: " + formatDate();
+
+/* Circular Stamp Text */
+function createCircularText(text){
+const container = document.getElementById("circleText");
+container.innerHTML="";
+for(let i=0;i<text.length;i++){
+const span = document.createElement("span");
+span.innerText = text[i];
+const angle = i * (360/text.length);
+span.style.transform =
+`rotate(${angle}deg) translate(0,-60px)`;
+container.appendChild(span);
+}
+}
+createCircularText("CHOLAMANDALAM FINANCE VIRUDHACHALAM");
 
 </script>
 
